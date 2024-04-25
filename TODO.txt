@@ -1,0 +1,60 @@
+Launch a competition, works on both iOS and android
+
+
+
+Theme:
+any type of comp, entering and judging of competition OR to facilitate 
+the competition itself (voting and entering). And determining a winner
+(someone should be able to enter results to be displayed, admin/judge)
+
+AppIcon + Splashscreen. (research reactNative + spacing and sizing)
+
+Logged in users shouldn't have to relog everytime app opens
+
+Host at least 1 competition.
+
+Comps should end by time or reaching certain criteria like score or votes
+
+Somesort of reward such as badge or frontscreen feature. (leaderboard?)
+
+app should be made ready for deployment
+
+(ADDITIONAL FUNCTIONALITY):
+    - Timed automatic launches.
+    - filtering.
+    - push notifications.
+    - creating and launching custom competitions.
+
+
+
+
+Client concept:
+    - structure data
+        -- list of comps, inside; list of entries (multiple collections noSQL)
+        -- users (another collection)
+    - moodboards (look at mobile apps specifically)
+    - plan scoping (breakdown of when you want what done)
+    - 
+
+
+
+
+
+
+
+Standups - 3 progress milestones
+
+Standup A (week 12):
+    o- project setup and repo access.
+    o- front end of login and auth with navigation.
+
+Standup B (week 14):
+    o- firebase auth and connection.
+    o- viewing and entering competition + frontend (function is priority, min requirement).
+
+Standup C (week 16):
+    o- plan what you would like to have done by end of session.
+    o- close to end of project deadline - plan to have almost everything done by this session.
+    o- WHAT YOU DECLARE WILL BE EXPECTED BY THE END OF MEETING + CHANGES (if declared).
+
+
