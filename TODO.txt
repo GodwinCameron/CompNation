@@ -37,6 +37,9 @@ Client concept:
     - 
 
 
+1v1 torn, see your next opponent
+
+
 
 
 
@@ -58,3 +61,17 @@ Standup C (week 16):
     o- WHAT YOU DECLARE WILL BE EXPECTED BY THE END OF MEETING + CHANGES (if declared).
 
 
+
+
+
+
+
+
+
+Commands for non-angular version of Expo:
+npx create-expo-app@latest --template blank@sdk-50
+npm install expo@latest
+npm install expo-status-bar@~1.12.1
+npm install react-native@0.74.1
+
+npm install expo@latest expo-status-bar@~1.12.1 react-native@0.74.1
