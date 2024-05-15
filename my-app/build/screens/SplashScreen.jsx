@@ -1,5 +1,7 @@
 import React from "react";
 import { Image, View, StyleSheet, Pressable } from "react-native";
+import { NavigationContainer } from '@react-navigation/native';
+import { createNativeStackNavigator } from '@react-navigation/native-stack';
 
 const styles = StyleSheet.create({
   main: {
@@ -14,12 +16,30 @@ const styles = StyleSheet.create({
   },
 });
 
-const SplashScreen = () => {
+// Stack Navigation:
+// const SplashScreen = ({ navigation }) => {
+//     const logo = require("../../assets/logo2.gif");
+
+//   return (
+//     <View style={styles.main}>
+//       <Pressable onPress={() => navigation.navigate('Login')}>
+//         <Image source={logo} style={styles.logo} />
+//       </Pressable>
+//     </View>
+//   );
+// };
+
+
+
+
+// React state Navigation:
+const SplashScreen = ({ navigateTo }) => {
+
   const logo = require("../../assets/logo2.gif");
 
   return (
     <View style={styles.main}>
-      <Pressable onPress={() => console.log("Pressed")}>
+      <Pressable onPress={() => navigateTo('Login')}>
         <Image source={logo} style={styles.logo} />
       </Pressable>
     </View>
