@@ -1,8 +1,0 @@
-{
-  "dependencies": {
-    "@react-navigation/native": "^6.1.17",
-    "expo": "^51.0.1",
-    "expo-status-bar": "~1.12.1",
-    "react-native": "^0.74.1"
-  }
-}

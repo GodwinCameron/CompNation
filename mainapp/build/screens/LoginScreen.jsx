@@ -1,3 +1,4 @@
+import { useState } from "react";
 import {
   Text,
   Image,
@@ -7,41 +8,9 @@ import {
   Pressable,
   Button,
 } from "react-native";
+import { handleLogin } from "../services/authService";
 
-const styles = StyleSheet.create({
-  main: {
-    flex: 1,
-    backgroundColor: "#101116",
-    alignItems: "center",
-    justifyContent: "flex-start",
-    fontSize: 35,
-    padding: 20,
-  },
-  logo: {
-    height: 50,
-    width: 100,
-    marginTop: 50,
-  },
-  content: {
-    flex: 1,
-    width: "100%",
-    padding: 15,
-    paddingTop: 40,
-  },
-  textColor: {
-    color: "#5E5E5E",
-  },
-  Input: {
-    backgroundColor: "#1E1E24",
-    padding: 15,
-    borderRadius: 10,
-    marginTop: 20,
-    border: "1px solid #00F083",
-    borderColor: "#00F083",
-    borderWidth: 2,
-    color: "#00F083",
-  },
-});
+
 
 
 // State Navigation:
@@ -94,6 +63,13 @@ const styles = StyleSheet.create({
 const LoginScreen = ({ navigateTo }) => {
   const logo = require("../../assets/logo2.png");
 
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+
+  const login = () => {
+    handleLogin(email, password);
+  }
+
   return (
     <View style={styles.main}>
       <Pressable onPress={() => navigateTo("Splash")}>
@@ -102,12 +78,14 @@ const LoginScreen = ({ navigateTo }) => {
       <View style={styles.content}>
         <Text style={styles.textColor}> Login</Text>
         <TextInput
-          placeholder="Username"
+          placeholder="Email"
+          onChangeText={(e) => setEmail(e)}
           placeholderTextColor="#5E5E5E"
           style={styles.Input}
         ></TextInput>
         <TextInput
           placeholder="Password"
+          onChangeText={(e) => setPassword(e)}
           placeholderTextColor="#5E5E5E"
           style={styles.Input}
           secureTextEntry={true}
@@ -117,7 +95,7 @@ const LoginScreen = ({ navigateTo }) => {
             Forgot your password?
           </Text>
         </Pressable>
-        <Button title="Login" color="#00F083" style={styles.button} />
+        <Button title="Login" onPress={login} color="#00F083" style={styles.button} />
         <Pressable onPress={() => navigateTo("Register")}>
           <Text
             style={{
@@ -135,3 +113,42 @@ const LoginScreen = ({ navigateTo }) => {
 };
 
 export default LoginScreen;
+
+
+
+
+
+const styles = StyleSheet.create({
+  main: {
+    flex: 1,
+    backgroundColor: "#101116",
+    alignItems: "center",
+    justifyContent: "flex-start",
+    fontSize: 35,
+    padding: 20,
+  },
+  logo: {
+    height: 50,
+    width: 100,
+    marginTop: 50,
+  },
+  content: {
+    flex: 1,
+    width: "100%",
+    padding: 15,
+    paddingTop: 40,
+  },
+  textColor: {
+    color: "#5E5E5E",
+  },
+  Input: {
+    backgroundColor: "#1E1E24",
+    padding: 15,
+    borderRadius: 10,
+    marginTop: 20,
+    border: "1px solid #00F083",
+    borderColor: "#00F083",
+    borderWidth: 2,
+    color: "#00F083",
+  },
+});
