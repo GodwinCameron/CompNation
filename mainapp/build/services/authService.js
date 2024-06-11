@@ -50,7 +50,7 @@ export const handleCreateUser = (firstName, lastName, email, username, password)
             currentUser.email,
             currentUser.username,
             currentUser.firstName,
-            currentUser.lastName
+            currentUser.lastName,
           );
         })
         .catch((error) => {

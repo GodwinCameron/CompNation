@@ -93,13 +93,13 @@ const RegisterScreen = ({ navigateTo }) => {
             <TextInput
               placeholder="First Name"
               onChangeText={(e) => setFirstName(e)}
-              placeholderTextColor="#5E5E5E"
+              placeholderTextColor="#5E1111"
               style={styles.Input}
             ></TextInput>
             <TextInput
               placeholder="Last Name"
               onChangeText={(e) => setLastName(e)}
-              placeholderTextColor="#5E5E5E"
+              placeholderTextColor="#5E1111"
               style={styles.Input}
             ></TextInput>
             <TextInput
@@ -111,7 +111,7 @@ const RegisterScreen = ({ navigateTo }) => {
             <TextInput
               placeholder="Choose a Username"
               onChangeText={(e) => setUsername(e)}
-              placeholderTextColor="#5E5E5E"
+              placeholderTextColor="#5E1111"
               style={styles.Input}
             ></TextInput>
             <TextInput
@@ -124,7 +124,7 @@ const RegisterScreen = ({ navigateTo }) => {
             <TextInput
               placeholder="Repeat Password"
               onChangeText={(e) => setRepeatPassword(e)}
-              placeholderTextColor="#5E5E5E"
+              placeholderTextColor="#5E1111"
               style={styles.Input}
               secureTextEntry={true}
             ></TextInput>

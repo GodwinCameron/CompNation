@@ -1,55 +1,60 @@
-import { Text, View, StyleSheet, ScrollView, Pressable, TouchableOpacity } from "react-native";
+import React, { useEffect, useState } from "react";
+import { Text, View, StyleSheet, ScrollView, Pressable } from "react-native";
+import { collection, onSnapshot } from "firebase/firestore";
+import { db } from "../../firebase";
 import CompetitionListItem from "../components/CompetitionListItem";
-import React, { useCallback, useEffect, useState } from "react";
-import { getAllCompetitions } from "../services/DbService";
 import { AntDesign } from "@expo/vector-icons";
 
 const CompetitionsScreen = (props) => {
+  const admin = true;
+  const user = props.user;
+  const { navigateTo } = props;
 
-    const admin = true;
+  const [listItems, setListItems] = useState([]);
 
-    const { navigateTo } = props;
+  useEffect(() => {
+    const competitionsRef = collection(db, "competitions");
 
-    const [listItems, setListItems] = useState([]);
+    const unsubscribe = onSnapshot(competitionsRef, (snapshot) => {
+      //<-- snapshot listener, base code provided by ChatGPT
+      const competitions = snapshot.docs.map((doc) => ({
+        id: doc.id,
+        ...doc.data(),
+      }));
+      setListItems(competitions);
+    });
 
-  useEffect(
-    useCallback(() => {
-      handleGettingData();
-
-      return () => {
-        // Do something when screen is out of focus
-      };
-    }),
-    []
-  );
-
-    const handleGettingData = async () => {
-        var listItems = await getAllCompetitions();
-        setListItems(listItems);
-    }
-
+    return () => unsubscribe();
+  }, []);
 
   return (
     <View style={styles.main}>
+      <Pressable onPress={() => navigateTo("Profile")}>
+        <AntDesign name="profile" size={24} color="#00F083" />
+      </Pressable>
       <Text style={styles.textColor}>Competitions:</Text>
       <ScrollView contentContainerStyle={styles.scroll}>
-      {listItems != [] ? (
+        {listItems.length > 0 ? (
           listItems.map((item, index) => (
-            <TouchableOpacity
-            style={styles.fullWidth}
-              key={index}
-              onPress={() => console.log(props.user.email, " Joined the ",item.title," event!")}
-            >
-              <CompetitionListItem item={item} />
-            </TouchableOpacity>
+            <CompetitionListItem key={index} item={item} user={user} />
           ))
         ) : (
           <Text>No Competitions yet...</Text>
         )}
-        <CompetitionListItem />
-        <CompetitionListItem />
-        {admin && <Pressable onPress={() => navigateTo("EventPlan")}><AntDesign name="pluscircleo" size={24} color="#00F083" /></Pressable>}
-        
+        <CompetitionListItem/>
+        {/* <CompetitionListItem/>
+        <CompetitionListItem/>
+        <CompetitionListItem/>
+        <CompetitionListItem/>
+        <CompetitionListItem/>
+        <CompetitionListItem/>
+        <CompetitionListItem/> */}
+
+        {admin && (
+          <Pressable onPress={() => navigateTo("EventPlan")}>
+            <AntDesign name="pluscircleo" size={24} color="#00F083" />
+          </Pressable>
+        )}
       </ScrollView>
     </View>
   );
@@ -74,8 +79,5 @@ const styles = StyleSheet.create({
   textColor: {
     color: "#5E5E5E",
     marginBottom: 20,
-  },
-  fullWidth: {
-    width: "100%",
   },
 });
