@@ -1,15 +1,16 @@
-import { Text, Image, View, StyleSheet, Pressable, Button } from "react-native";
+import { Text, Image, View, StyleSheet, Pressable, Button, TouchableOpacity } from "react-native";
 import { handleLogout } from "../services/authService";
 import { AntDesign } from "@expo/vector-icons";
 
 const ProfileScreen = (props) => {
-  const logo = require("../../assets/logo2.png");
+  const profileIcon = require("../../assets/icons/profile.png");
 
   const { navigateTo } = props;
 
   const logout = () => {
-    handleLogout();
-    navigateTo("Login");
+    // handleLogout();
+    // navigateTo("Login");
+    console.log(props.user);
   };
 
   return (
@@ -23,19 +24,22 @@ const ProfileScreen = (props) => {
         </Pressable>
       </View>
       <Pressable onPress={() => navigateTo("Splash")}>
-        <Image source={logo} style={styles.logo} />
+        <Image source={profileIcon} style={styles.profileIcon} />
       </Pressable>
       <View style={styles.content}>
         <Text style={styles.textColor}> Profile:</Text>
         <Text style={[styles.textColor, styles.userEmail]}>
           {props.user.email}
         </Text>
-        <Button
-          title="Logout"
+        <Text style={styles.textColor}> Competitions:</Text>
+        <View style={styles.accountActions}>
+        <TouchableOpacity
           onPress={logout}
-          color="#00F083"
           style={styles.button}
-        />
+        >
+          <Text style={styles.buttonText}>Logout</Text>
+        </TouchableOpacity>
+        </View>
       </View>
     </View>
   );
@@ -65,8 +69,8 @@ const styles = StyleSheet.create({
     justifyContent: "space-between",
     padding: 20,
   },
-  logo: {
-    height: 50,
+  profileIcon: {
+    height: 100,
     width: 100,
     marginTop: 50,
   },
@@ -81,7 +85,7 @@ const styles = StyleSheet.create({
   },
   userEmail: {
     fontSize: 20,
-    marginBottom: 200,
+    marginBottom: 20,
   },
   Input: {
     backgroundColor: "#1E1E24",
@@ -92,5 +96,24 @@ const styles = StyleSheet.create({
     borderColor: "#00F083",
     borderWidth: 2,
     color: "#00F083",
+  },
+  button: {
+    backgroundColor: "#00F083",
+    padding: 15,
+    borderRadius: 10,
+    marginTop: 20,
+    width: "30%",
+    alignItems: "center",
+  },
+  buttonText: {
+    color: "#101116",
+  },
+  accountActions: {
+    marginTop: "auto",
+    marginBottom: 20,
+    flexDirection: "row",
+    justifyContent: "space-between",
+    alignContent: "center",
+    justifyContent: "flex-end",
   },
 });
