@@ -31,9 +31,7 @@ const ProfileScreen = (props) => {
           ...doc.data(),
         }));
         setCompetitions(competitionsList);
-        setTimeout(() => {
-          setLoading(false);
-        }, 4000);
+        setLoading(false);
       } catch (error) {
         console.error("Error fetching competitions:", error);
       }

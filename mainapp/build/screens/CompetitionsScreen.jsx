@@ -24,17 +24,13 @@ const CompetitionsScreen = (props) => {
   useEffect(() => {
     const competitionsRef = collection(db, "competitions");
 
-    const unsubscribe = onSnapshot(competitionsRef, (snapshot) => {
-      //<-- snapshot listener, base code provided by ChatGPT
+    const unsubscribe = onSnapshot(competitionsRef, (snapshot) => {//<-- snapshot listener, base code provided by ChatGPT
       const competitions = snapshot.docs.map((doc) => ({
         id: doc.id,
         ...doc.data(),
       }));
       setListItems(competitions);
-      setTimeout(() => {
-        setLoading(false);
-      }, 2000);
-      // setLoading(false);
+      setLoading(false);
     });
 
     return () => unsubscribe();
@@ -46,15 +42,9 @@ const CompetitionsScreen = (props) => {
   };
 
   const logo = require("../../assets/logo2.gif");
-  const profileIcon = require("../../assets/icons/profile.png");
 
   return (
     <View style={styles.main}>
-      <View style={styles.topRow}>
-        <Pressable onPress={() => navigateTo("Profile")}>
-          <Image source={profileIcon} style={styles.profileIcon} />
-        </Pressable>
-      </View>
       <Text style={styles.textColor}>Competitions:</Text>
       <ScrollView contentContainerStyle={styles.scroll}>
         {loading ? (

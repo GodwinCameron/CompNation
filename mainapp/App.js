@@ -1,43 +1,82 @@
 import { StatusBar } from "expo-status-bar";
-import { StyleSheet, Text, View } from "react-native";
+import { BackHandler, StyleSheet, Text, ToastAndroid, View } from "react-native";
+import { NavigationContainer } from "@react-navigation/native";
+import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
+import { cloneElement, useEffect, useState } from "react";
+import { onAuthStateChanged } from "firebase/auth";
+import { auth } from "./firebase";
 import LoginScreen from "./build/screens/LoginScreen";
 import RegisterScreen from "./build/screens/RegisterScreen";
 import SplashScreen from "./build/screens/SplashScreen";
-import { NavigationContainer } from "@react-navigation/native";
-import { createNativeStackNavigator } from "@react-navigation/native-stack";
-import { useEffect, useState } from "react";
-import { onAuthStateChanged } from "firebase/auth";
-import { auth } from "./firebase";
 import ProfileScreen from "./build/screens/ProfileScreen";
 import CompetitionsScreen from "./build/screens/CompetitionsScreen";
 import EventPlannerScreen from "./build/screens/EventPlannerScreen";
 import IndividualCompetitionScreen from "./build/screens/IndividualCompetition";
+import { Ionicons } from '@expo/vector-icons';
 
-// Stack Navigation:
-// const Stack = createNativeStackNavigator();
-// export default function App() {
-//   return (
-//     <>
-//     <NavigationContainer>
-//       <Stack.Navigator>
-//         <Stack.Screen name="Splash" component={SplashScreen} />
-//         <Stack.Screen name="Login" component={LoginScreen} />
-//         <Stack.Screen name="Register" component={RegisterScreen} />
-//       </Stack.Navigator>
-//     </NavigationContainer>
-//     </>
-//   );
-// }
+const Tab = createBottomTabNavigator();
+
+function CustomTabNavigator({ loggedIn, user, event, navigateTo, setEvent }) {
+  const tabScreen = (name, component, iconName) => {
+    return (
+      <Tab.Screen
+        name={name}
+        options={{ 
+          headerShown: false,
+          tabBarIcon: ({ color, size }) => (
+            <Ionicons name={iconName} color={color} size={size} />
+          ),
+        }}
+        children={() =>
+          cloneElement(component, {
+            navigateTo,
+            loggedIn,
+            user,
+            event,
+            setEvent,
+          })
+        }
+      />
+    );
+  };
+
+  return (
+    <Tab.Navigator
+      screenOptions={{
+        tabBarActiveTintColor: "#00F083", 
+        tabBarInactiveTintColor: "#f4f4f4", 
+        tabBarStyle: {
+          backgroundColor: "#191A1F", 
+          borderTopWidth: 0, 
+          paddingBottom: 5,
+        },
+        tabBarLabelStyle: {
+          fontSize: 10, 
+        },
+      }}
+    >
+
+      {tabScreen("Competitions", <CompetitionsScreen /> , "trophy")}
+      {tabScreen("Profile", <ProfileScreen />, "person")}
+
+      {/* Special Screens: */}
+      {/* {tabScreen("EventPlan", <EventPlannerScreen />)}
+      {tabScreen("EventDetails", <IndividualCompetitionScreen />)}
+      {tabScreen("Splash", <SplashScreen />)}
+      {tabScreen("Login", <LoginScreen />)}
+      {tabScreen("Register", <RegisterScreen />)} */}
+    </Tab.Navigator>
+  );
+}
+
 
 export default function App() {
   const [screen, setScreen] = useState("Splash");
   const [loggedIn, setLoggedIn] = useState(false);
   const [user, setUser] = useState(null);
   const [event, setEvent] = useState({});
-
-  const navigateTo = (screenName) => {
-    setScreen(screenName);
-  };
+  const [loading, setLoading] = useState(true);
+  const [backPressedOnce, setBackPressedOnce] = useState(false);
 
   useEffect(() => {
     const unsubscribe = onAuthStateChanged(auth, (user) => {
@@ -45,57 +84,84 @@ export default function App() {
         console.log("User ", user.email, " is logged in");
         setUser(user);
         setLoggedIn(true);
-          navigateTo("Profile");
+        setLoading(false);
+        navigateTo("Profile");
       } else {
         console.log("No user is logged in.");
         setLoggedIn(false);
+        setLoading(false);
       }
     });
     return unsubscribe;
   }, []);
 
+  useEffect(() => {
+    const backAction = () => {
+      if (backPressedOnce) {
+        BackHandler.exitApp();
+        return true;
+      }
+
+      setBackPressedOnce(true);
+      ToastAndroid.show("Press back again to exit", ToastAndroid.SHORT);
+
+      setTimeout(() => {
+        setBackPressedOnce(false);
+        backHandler.remove();
+      }, 1000);
+
+      return true;
+    };
+
+    const backHandler = BackHandler.addEventListener(
+      "hardwareBackPress",
+      backAction
+    );
+
+    return () => backHandler.remove();
+  }, [backPressedOnce]);
+
+  const navigateTo = (screenName) => {
+    setScreen(screenName);
+  };
+
   const renderScreen = () => {
     switch (screen) {
-      case "Splash":
-        return <SplashScreen navigateTo={navigateTo} />;
       case "Login":
-        if (loggedIn) {
-          navigateTo("Profile");
-          return null;
-        } else {
-          return <LoginScreen navigateTo={navigateTo} />;
-        }
+        return <LoginScreen navigateTo={navigateTo} />;
       case "Register":
         return <RegisterScreen navigateTo={navigateTo} />;
-      case "Competitions":
-        return <CompetitionsScreen setEvent={setEvent} user={user} navigateTo={navigateTo} />;
       case "Profile":
         if (!loggedIn) {
           navigateTo("Login");
           return null;
         } else {
-          return <ProfileScreen user={user} navigateTo={navigateTo} />;
+          return null;
         }
-      case "EventPlan":
-        return <EventPlannerScreen navigateTo={navigateTo} />;
-      case "EventDetails":
-        return <IndividualCompetitionScreen user={user} event={event} navigateTo={navigateTo} />;
       default:
-        return <SplashScreen navigateTo={navigateTo} />;
+        return <LoginScreen navigateTo={navigateTo} />;
     }
   };
 
-  // return (
-  //   <>
-  //     {loggedIn ? (<ProfileScreen user={user} navigateTo={navigateTo} />) : renderScreen()}
-  //     <StatusBar style="auto" />
-  //   </>
-  // );
-
   return (
     <>
-      {renderScreen()}
-      <StatusBar style="auto" />
+      {loading ? (
+        <SplashScreen />
+      ) : loggedIn ? (
+        <NavigationContainer>
+          <CustomTabNavigator
+            screen={screen}
+            loggedIn={loggedIn}
+            user={user}
+            event={event}
+            navigateTo={navigateTo}
+            setEvent={setEvent}
+          />
+          <StatusBar style="auto" />
+        </NavigationContainer>
+      ) : (
+        renderScreen()
+      )}
     </>
   );
 }
