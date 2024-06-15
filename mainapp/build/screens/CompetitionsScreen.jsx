@@ -1,5 +1,13 @@
 import React, { useEffect, useState } from "react";
-import { Text, View, StyleSheet, ScrollView, Pressable } from "react-native";
+import {
+  Text,
+  View,
+  StyleSheet,
+  ScrollView,
+  Pressable,
+  TouchableOpacity,
+  Image,
+} from "react-native";
 import { collection, onSnapshot } from "firebase/firestore";
 import { db } from "../../firebase";
 import CompetitionListItem from "../components/CompetitionListItem";
@@ -11,6 +19,7 @@ const CompetitionsScreen = (props) => {
   const { navigateTo } = props;
 
   const [listItems, setListItems] = useState([]);
+  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     const competitionsRef = collection(db, "competitions");
@@ -22,26 +31,46 @@ const CompetitionsScreen = (props) => {
         ...doc.data(),
       }));
       setListItems(competitions);
+      setTimeout(() => {
+        setLoading(false);
+      }, 2000);
+      // setLoading(false);
     });
 
     return () => unsubscribe();
   }, []);
 
+  const handleEventClick = (item) => {
+    props.setEvent(item);
+    navigateTo("EventDetails");
+  };
+
+  const logo = require("../../assets/logo2.gif");
+  const profileIcon = require("../../assets/icons/profile.png");
+
   return (
     <View style={styles.main}>
-      <Pressable onPress={() => navigateTo("Profile")}>
-        <AntDesign name="profile" size={24} color="#00F083" />
-      </Pressable>
+      <View style={styles.topRow}>
+        <Pressable onPress={() => navigateTo("Profile")}>
+          <Image source={profileIcon} style={styles.profileIcon} />
+        </Pressable>
+      </View>
       <Text style={styles.textColor}>Competitions:</Text>
       <ScrollView contentContainerStyle={styles.scroll}>
-        {listItems.length > 0 ? (
+        {loading ? (
+          <Image source={logo} style={styles.logo} />
+        ) : listItems.length > 0 ? (
           listItems.map((item, index) => (
-            <CompetitionListItem key={index} item={item} user={user} />
+            <TouchableOpacity
+              key={index}
+              onPress={() => handleEventClick(item)}
+            >
+              <CompetitionListItem key={index} item={item} user={user} />
+            </TouchableOpacity>
           ))
         ) : (
-          <Text>No Competitions yet...</Text>
+          <Text style={styles.textColor}>No competitions available yet...</Text>
         )}
-        <CompetitionListItem/>
         {/* <CompetitionListItem/>
         <CompetitionListItem/>
         <CompetitionListItem/>
@@ -55,6 +84,12 @@ const CompetitionsScreen = (props) => {
             <AntDesign name="pluscircleo" size={24} color="#00F083" />
           </Pressable>
         )}
+        <TouchableOpacity>
+          <View style={styles.passedEvents}>
+          <Text style={styles.text2}>View previous events...</Text>
+          </View>
+          
+        </TouchableOpacity>
       </ScrollView>
     </View>
   );
@@ -72,6 +107,11 @@ const styles = StyleSheet.create({
     padding: 20,
     paddingTop: 50,
   },
+  topRow: {
+    width: "100%",
+    flexDirection: "row",
+    justifyContent: "flex-end",
+  },
   scroll: {
     width: 340,
     alignItems: "center",
@@ -79,5 +119,23 @@ const styles = StyleSheet.create({
   textColor: {
     color: "#5E5E5E",
     marginBottom: 20,
+  },
+  logo: {
+    height: 50,
+    width: 50,
+  },
+  profileIcon: {
+    height: 30,
+    width: 30,
+  },
+  text2: {
+    color: "#00F083",
+  },
+  passedEvents: {
+    marginTop: 20,
+    borderColor: "#00F083",
+    borderWidth: 1,
+    borderRadius: 10,
+    padding: 10,
   },
 });

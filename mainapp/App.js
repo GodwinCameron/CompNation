@@ -11,6 +11,7 @@ import { auth } from "./firebase";
 import ProfileScreen from "./build/screens/ProfileScreen";
 import CompetitionsScreen from "./build/screens/CompetitionsScreen";
 import EventPlannerScreen from "./build/screens/EventPlannerScreen";
+import IndividualCompetitionScreen from "./build/screens/IndividualCompetition";
 
 // Stack Navigation:
 // const Stack = createNativeStackNavigator();
@@ -32,6 +33,7 @@ export default function App() {
   const [screen, setScreen] = useState("Splash");
   const [loggedIn, setLoggedIn] = useState(false);
   const [user, setUser] = useState(null);
+  const [event, setEvent] = useState({});
 
   const navigateTo = (screenName) => {
     setScreen(screenName);
@@ -43,9 +45,7 @@ export default function App() {
         console.log("User ", user.email, " is logged in");
         setUser(user);
         setLoggedIn(true);
-        setTimeout(() => {
           navigateTo("Profile");
-        }, 4000);
       } else {
         console.log("No user is logged in.");
         setLoggedIn(false);
@@ -68,7 +68,7 @@ export default function App() {
       case "Register":
         return <RegisterScreen navigateTo={navigateTo} />;
       case "Competitions":
-        return <CompetitionsScreen user={user} navigateTo={navigateTo} />;
+        return <CompetitionsScreen setEvent={setEvent} user={user} navigateTo={navigateTo} />;
       case "Profile":
         if (!loggedIn) {
           navigateTo("Login");
@@ -78,6 +78,8 @@ export default function App() {
         }
       case "EventPlan":
         return <EventPlannerScreen navigateTo={navigateTo} />;
+      case "EventDetails":
+        return <IndividualCompetitionScreen user={user} event={event} navigateTo={navigateTo} />;
       default:
         return <SplashScreen navigateTo={navigateTo} />;
     }

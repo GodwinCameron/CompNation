@@ -1,20 +1,31 @@
-import { Text, View, StyleSheet, TouchableOpacity } from "react-native";
+import {
+  Text,
+  View,
+  StyleSheet,
+  TouchableOpacity,
+  ScrollView,
+} from "react-native";
 import { updatePlayers } from "../services/DbService";
 
 const CompetitionListItem = (props) => {
   console.log(props.item);
 
-  const handleUpdatePlayers = async () => {
-    const competitionId = props.item.id;
-    const player = props.user.email;
-    const result = await updatePlayers(competitionId, player);
-  if (result) {
-    console.log("Player successfully added");
-    console.log("User ", props.user.email," is joining the competition", props.item.title);
-  } else {
-    console.error("Failed to add player");
-  }
-  }
+  // const handleUpdatePlayers = async () => {
+  //   const competitionId = props.item.id;
+  //   const player = props.user.email;
+  //   const result = await updatePlayers(competitionId, player);
+  //   if (result) {
+  //     console.log("Player successfully added");
+  //     console.log(
+  //       "User ",
+  //       props.user.email,
+  //       " is joining the competition",
+  //       props.item.title
+  //     );
+  //   } else {
+  //     console.error("Failed to add player");
+  //   }
+  // };
 
   // const handleUpdatePlayers = async () => {
   //   console.log(
@@ -26,7 +37,8 @@ const CompetitionListItem = (props) => {
   // };
 
   return (
-    <TouchableOpacity onPress={handleUpdatePlayers}>
+    // <TouchableOpacity onPress={handleUpdatePlayers}>
+    <>
       <View style={styles.main}>
         <View style={styles.title}>
           <Text style={styles.textColor}>Event:</Text>
@@ -45,25 +57,40 @@ const CompetitionListItem = (props) => {
           )}
         </View>
         <View style={styles.players}>
-          {props && props.item && props.item.players.length > 0 ? (
-            <>
-              <Text style={styles.textColor}>Current Players:</Text>
-              {props.item.players.map((player, index) => (
-                <Text key={index} style={styles.textColor}>
-                  {player}
-                </Text>
-              ))}
-            </>
-          ) : (
-            <>
+          <Text style={styles.textColor}>Current Players:</Text>
+          <ScrollView contentContainerStyle={styles.playersContainer}>
+            {props && props.item && props.item.players.length > 0 ? (
+              props.item.players.map((player, index) =>
+                player === props.user.email ? (
+                  <Text
+                    key={index}
+                    style={styles.textColor3}
+                    numberOfLines={1}
+                    ellipsizeMode="tail"
+                  >
+                    You
+                  </Text>
+                ) : (
+                  <Text
+                    key={index}
+                    style={styles.textColor}
+                    numberOfLines={1}
+                    ellipsizeMode="tail"
+                  >
+                    {player}
+                  </Text>
+                )
+              )
+            ) : (
               <Text style={styles.textColor2}>
                 &#40; no players entered &#41;
               </Text>
-            </>
-          )}
+            )}
+          </ScrollView>
         </View>
       </View>
-    </TouchableOpacity>
+    </>
+    // </TouchableOpacity>
   );
 };
 
@@ -90,6 +117,9 @@ const styles = StyleSheet.create({
   textColor2: {
     color: "#5E5E5E",
   },
+  textColor3: {
+    color: "#F3914B",
+  },
   title: {
     display: "flex",
     width: "20%",
@@ -104,5 +134,9 @@ const styles = StyleSheet.create({
     display: "flex",
     width: "50%",
     alignItems: "center",
+    maxHeight: 60,
+  },
+  playersContainer: {
+    flexGrow: 1,
   },
 });
