@@ -1,3 +1,4 @@
+import React, { useEffect, useState } from "react";
 import {
   Text,
   View,
@@ -7,12 +8,14 @@ import {
 } from "react-native";
 import { AntDesign } from "@expo/vector-icons";
 import { updatePlayers } from "../services/DbService";
-import { useEffect, useState } from "react";
+import { db } from "../../firebase";
+import { doc, onSnapshot } from "firebase/firestore";
 
 const IndividualCompetitionScreen = (props) => {
   const [canJoin, setCanJoin] = useState(true);
-  // const [reloadFlag, setReloadFlag] = useState(false);
-  const { navigateTo, event, user } = props;
+  const [eventDetails, setEventDetails] = useState(null); // Set initial state to null
+
+  const { setDeepNav, event, user } = props;
 
   const handleUpdatePlayers = async () => {
     const competitionId = event.id;
@@ -33,10 +36,10 @@ const IndividualCompetitionScreen = (props) => {
 
   const renderBrackets = () => {
     const playerPairs = [];
-    for (let i = 0; i < event.players.length; i += 2) {
+    for (let i = 0; i < eventDetails.players.length; i += 2) {
       playerPairs.push({
-        player1: event.players[i],
-        player2: event.players[i + 1] || "Awaiting bracket victor...",
+        player1: eventDetails.players[i],
+        player2: eventDetails.players[i + 1] || "Awaiting bracket victor...",
       });
     }
 
@@ -50,74 +53,85 @@ const IndividualCompetitionScreen = (props) => {
   };
 
   useEffect(() => {
-    if (event.players.includes(user.email)) {
+    const eventRef = doc(db, "competitions", event.id);
+
+    const unsubscribe = onSnapshot(eventRef, (doc) => {
+      setEventDetails(doc.data());
+    });
+
+    return () => unsubscribe();
+  }, [event.id]);
+
+  useEffect(() => {
+    if (eventDetails && eventDetails.players.includes(user.email)) {
       setCanJoin(false);
     }
-  }, []);
+  }, [eventDetails, user.email]);
 
   return (
     <View style={styles.main}>
       <View style={styles.topRow}>
-        <Pressable onPress={() => navigateTo("Competitions")}>
+        <Pressable onPress={() => setDeepNav("")}>
           <View style={styles.row}>
             <AntDesign name="arrowleft" size={12} color="#00F083" />
             <Text style={styles.text}>Back</Text>
           </View>
         </Pressable>
       </View>
-      <View style={styles.content}>
-        <Text style={styles.textColor}>Event: </Text>
-        <View>
-          <View style={styles.title}>
-            {event && (
-              <Text style={styles.textColor}> Title: {event.title}</Text>
-            )}
+      {eventDetails ? (
+        <View style={styles.content}>
+          <Text style={styles.textColor}>Event: </Text>
+          <View>
+            <View style={styles.title}>
+              <Text style={styles.textColor}>Title: {eventDetails.title}</Text>
+            </View>
+            <View style={styles.description}>
+              <Text style={styles.textColor}>Description:</Text>
+              <Text style={styles.textColor}>{eventDetails.description}</Text>
+            </View>
+            <View style={styles.players}></View>
           </View>
-          <View style={styles.description}>
-            <Text style={styles.textColor}>Description:</Text>
-            {event && <Text style={styles.textColor}>{event.description}</Text>}
-          </View>
-          <View style={styles.players}></View>
-        </View>
-        <Text style={styles.textColor}>Competitors:</Text>
-        {event && event.players.length > 0 ? (
-          <>
-            <Text style={styles.textColor}>Current Players:</Text>
-            {event.players.map((player, index) =>
-              player === user.email ? (
-                <Text key={index} style={styles.textColor3}>
-                  {player} (You)
-                </Text>
-              ) : (
-                <Text key={index} style={styles.textColor}>
-                  {player}
-                </Text>
-              )
-            )}
-          </>
-        ) : (
-          <Text style={styles.textColor2}>&#40; no players entered &#41;</Text>
-        )}
-        {canJoin ? (
-          <TouchableOpacity onPress={() => handleUpdatePlayers()}>
-            <Text style={styles.joinButton}>Join Event</Text>
-          </TouchableOpacity>
-        ) : (
-          <Text style={styles.leaveButton}>Leave Event</Text>
-        )}
+          <Text style={styles.textColor}>Competitors:</Text>
+          {eventDetails.players.length > 0 ? (
+            <>
+              <Text style={styles.textColor}>Current Players:</Text>
+              {eventDetails.players.map((player, index) =>
+                player === user.email ? (
+                  <Text key={index} style={styles.textColor3}>
+                    {player} (You)
+                  </Text>
+                ) : (
+                  <Text key={index} style={styles.textColor}>
+                    {player}
+                  </Text>
+                )
+              )}
+            </>
+          ) : (
+            <Text style={styles.textColor2}>&#40; no players entered &#41;</Text>
+          )}
+          {canJoin ? (
+            <TouchableOpacity onPress={handleUpdatePlayers}>
+              <Text style={styles.joinButton}>Join Event</Text>
+            </TouchableOpacity>
+          ) : (
+            <Text style={styles.leaveButton}>Leave Event</Text>
+          )}
 
-        {event.players.length > 0 ? (
-          <View style={styles.playerBrackets}>
-            <Text style={styles.textColor}>Player Brackets:</Text>
-            {renderBrackets()}
-          </View>
-        ) : (
-          <Text style={styles.textColor2}>
-            &#40; Player brackets require a minimun of two players to generate
-            &#41;
-          </Text>
-        )}
-      </View>
+          {eventDetails.players.length > 0 ? (
+            <View style={styles.playerBrackets}>
+              <Text style={styles.textColor}>Player Brackets:</Text>
+              {renderBrackets()}
+            </View>
+          ) : (
+            <Text style={styles.textColor2}>
+              &#40; Player brackets require a minimum of two players to generate &#41;
+            </Text>
+          )}
+        </View>
+      ) : (
+        <Text style={styles.textColor}>Loading event details...</Text>
+      )}
     </View>
   );
 };

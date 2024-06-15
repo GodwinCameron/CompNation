@@ -67,7 +67,7 @@ import { handleCreateUser } from "../services/authService";
 //   };
 
 // React state Navigation:
-const RegisterScreen = ({ navigateTo }) => {
+const RegisterScreen = ({ authNavigate }) => {
   const [firstName, setFirstName] = useState("");
   const [lastName, setLastName] = useState("");
   const [email, setEmail] = useState("");
@@ -134,7 +134,7 @@ const RegisterScreen = ({ navigateTo }) => {
               color="#FF00B8"
               style={styles.button}
             />
-            <Pressable onPress={() => navigateTo("Login")}>
+            <Pressable onPress={() => authNavigate("Login")}>
               <Text
                 style={{
                   color: "#FF00B8",

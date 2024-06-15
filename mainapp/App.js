@@ -1,5 +1,11 @@
 import { StatusBar } from "expo-status-bar";
-import { BackHandler, StyleSheet, Text, ToastAndroid, View } from "react-native";
+import {
+  BackHandler,
+  StyleSheet,
+  Text,
+  ToastAndroid,
+  View,
+} from "react-native";
 import { NavigationContainer } from "@react-navigation/native";
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import { cloneElement, useEffect, useState } from "react";
@@ -12,16 +18,16 @@ import ProfileScreen from "./build/screens/ProfileScreen";
 import CompetitionsScreen from "./build/screens/CompetitionsScreen";
 import EventPlannerScreen from "./build/screens/EventPlannerScreen";
 import IndividualCompetitionScreen from "./build/screens/IndividualCompetition";
-import { Ionicons } from '@expo/vector-icons';
+import { Ionicons } from "@expo/vector-icons";
 
 const Tab = createBottomTabNavigator();
 
-function CustomTabNavigator({ loggedIn, user, event, navigateTo, setEvent }) {
+function CustomTabNavigator({ loggedIn, user, event, navigateTo, setEvent, setDeepNav }) {
   const tabScreen = (name, component, iconName) => {
     return (
       <Tab.Screen
         name={name}
-        options={{ 
+        options={{
           headerShown: false,
           tabBarIcon: ({ color, size }) => (
             <Ionicons name={iconName} color={color} size={size} />
@@ -34,6 +40,7 @@ function CustomTabNavigator({ loggedIn, user, event, navigateTo, setEvent }) {
             user,
             event,
             setEvent,
+            setDeepNav
           })
         }
       />
@@ -43,20 +50,19 @@ function CustomTabNavigator({ loggedIn, user, event, navigateTo, setEvent }) {
   return (
     <Tab.Navigator
       screenOptions={{
-        tabBarActiveTintColor: "#00F083", 
-        tabBarInactiveTintColor: "#f4f4f4", 
+        tabBarActiveTintColor: "#00F083",
+        tabBarInactiveTintColor: "#f4f4f4",
         tabBarStyle: {
-          backgroundColor: "#191A1F", 
-          borderTopWidth: 0, 
+          backgroundColor: "#191A1F",
+          borderTopWidth: 0,
           paddingBottom: 5,
         },
         tabBarLabelStyle: {
-          fontSize: 10, 
+          fontSize: 10,
         },
       }}
     >
-
-      {tabScreen("Competitions", <CompetitionsScreen /> , "trophy")}
+      {tabScreen("Competitions", <CompetitionsScreen />, "trophy")}
       {tabScreen("Profile", <ProfileScreen />, "person")}
 
       {/* Special Screens: */}
@@ -69,9 +75,10 @@ function CustomTabNavigator({ loggedIn, user, event, navigateTo, setEvent }) {
   );
 }
 
-
 export default function App() {
-  const [screen, setScreen] = useState("Splash");
+  const [authScreen, setAuthScreen] = useState("Splash");
+  const [deepNav, setDeepNav] = useState("");
+  const [deepNavScreen, setDeepNavScreen] = useState("");
   const [loggedIn, setLoggedIn] = useState(false);
   const [user, setUser] = useState(null);
   const [event, setEvent] = useState({});
@@ -85,7 +92,6 @@ export default function App() {
         setUser(user);
         setLoggedIn(true);
         setLoading(false);
-        navigateTo("Profile");
       } else {
         console.log("No user is logged in.");
         setLoggedIn(false);
@@ -121,41 +127,51 @@ export default function App() {
     return () => backHandler.remove();
   }, [backPressedOnce]);
 
-  const navigateTo = (screenName) => {
-    setScreen(screenName);
+  const authNavigate = (screenName) => {
+    setAuthScreen(screenName);
   };
 
   const renderScreen = () => {
-    switch (screen) {
+    switch (authScreen) {
       case "Login":
-        return <LoginScreen navigateTo={navigateTo} />;
+        return <LoginScreen authNavigate={authNavigate} />;
       case "Register":
-        return <RegisterScreen navigateTo={navigateTo} />;
+        return <RegisterScreen authNavigate={authNavigate} />;
       case "Profile":
         if (!loggedIn) {
-          navigateTo("Login");
+          authNavigate("Login");
           return null;
         } else {
           return null;
         }
       default:
-        return <LoginScreen navigateTo={navigateTo} />;
+        return <LoginScreen authNavigate={authNavigate} />;
+    }
+  };
+
+  const deepNavRenderScreen = () => {
+    switch (deepNav) {
+      case "details":
+        return <IndividualCompetitionScreen event={event} user={user} setDeepNav={setDeepNav}/>;
+      default:
+        return <ProfileScreen user={user} />;
     }
   };
 
   return (
     <>
-      {loading ? (
+      {deepNav !== "" ? (
+        deepNavRenderScreen()
+      ) : loading ? (
         <SplashScreen />
       ) : loggedIn ? (
         <NavigationContainer>
           <CustomTabNavigator
-            screen={screen}
             loggedIn={loggedIn}
             user={user}
             event={event}
-            navigateTo={navigateTo}
             setEvent={setEvent}
+            setDeepNav={setDeepNav}
           />
           <StatusBar style="auto" />
         </NavigationContainer>

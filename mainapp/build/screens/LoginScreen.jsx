@@ -60,7 +60,7 @@ import { handleLogin } from "../services/authService";
 
 
 // React state Navigation:
-const LoginScreen = ({ navigateTo }) => {
+const LoginScreen = ({ authNavigate }) => {
   const logo = require("../../assets/logo2.png");
 
   const [email, setEmail] = useState("");
@@ -96,7 +96,7 @@ const LoginScreen = ({ navigateTo }) => {
           </Text>
         </Pressable>
         <Button title="Login" onPress={login} color="#00F083" style={styles.button} />
-        <Pressable onPress={() => navigateTo("Register")}>
+        <Pressable onPress={() => authNavigate("Register")}>
           <Text
             style={{
               color: "#00F083",

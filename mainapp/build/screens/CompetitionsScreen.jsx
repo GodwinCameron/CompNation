@@ -16,7 +16,7 @@ import { AntDesign } from "@expo/vector-icons";
 const CompetitionsScreen = (props) => {
   const admin = true;
   const user = props.user;
-  const { navigateTo } = props;
+  const { setDeepNav } = props;
 
   const [listItems, setListItems] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -38,7 +38,7 @@ const CompetitionsScreen = (props) => {
 
   const handleEventClick = (item) => {
     props.setEvent(item);
-    navigateTo("EventDetails");
+    setDeepNav("details");
   };
 
   const logo = require("../../assets/logo2.gif");
