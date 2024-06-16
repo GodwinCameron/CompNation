@@ -10,7 +10,7 @@ import {
 import { createNewCompetition } from "../services/DbService";
 
 const EventPlannerScreen = (props) => {
-  const { navigateTo } = props;
+  const { setDeepNav } = props;
 
   const [title, setTitle] = useState("");
   const [description, setDescription] = useState("");
@@ -34,7 +34,7 @@ const EventPlannerScreen = (props) => {
         <Text>Event Planner Screen</Text>
         <Pressable
           onPress={() => {
-            navigateTo("Competitions");
+            setDeepNav("");
           }}
         >
           <Text style={styles.text}> &#60; Back</Text>

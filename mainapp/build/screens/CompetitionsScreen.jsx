@@ -70,7 +70,7 @@ const CompetitionsScreen = (props) => {
         <CompetitionListItem/> */}
 
         {admin && (
-          <Pressable onPress={() => navigateTo("EventPlan")}>
+          <Pressable onPress={() => setDeepNav("eventPlan")}>
             <AntDesign name="pluscircleo" size={24} color="#00F083" />
           </Pressable>
         )}

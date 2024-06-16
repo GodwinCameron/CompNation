@@ -7,31 +7,64 @@ import {
   TouchableOpacity,
 } from "react-native";
 import { AntDesign } from "@expo/vector-icons";
-import { updatePlayers } from "../services/DbService";
+import {
+  concludeEvent,
+  updatePlayers,
+  updateWinners,
+} from "../services/DbService";
 import { db } from "../../firebase";
 import { doc, onSnapshot } from "firebase/firestore";
 
 const IndividualCompetitionScreen = (props) => {
   const [canJoin, setCanJoin] = useState(true);
   const [eventDetails, setEventDetails] = useState(null); // Set initial state to null
+  const [selectedWinners, setSelectedWinners] = useState({});
 
   const { setDeepNav, event, user } = props;
 
-  const handleUpdatePlayers = async () => {
+  const handleUpdatePlayers = async (updateType) => {
     const competitionId = event.id;
     const player = user.email;
-    const result = await updatePlayers(competitionId, player);
-    if (result) {
-      console.log("Player successfully added");
-      console.log(
-        "User ",
-        user.email,
-        " is joining the competition",
-        event.title
-      );
+
+    if (updateType === "remove") {
+      console.log("Removing player");
+      const result = await updatePlayers(competitionId, player, true);
+      if (result) {
+        console.log("Player successfully removed");
+        console.log(
+          "User ",
+          user.email,
+          " is leaving the competition",
+          event.title
+        );
+        setCanJoin(true);
+      } else {
+        console.error("Failed to remove player");
+      }
+    } else if (updateType === "add") {
+      const result = await updatePlayers(competitionId, player);
+      if (result) {
+        console.log("Player successfully added");
+        console.log(
+          "User ",
+          user.email,
+          " is joining the competition",
+          event.title
+        );
+        setCanJoin(false);
+      } else {
+        console.error("Failed to add player");
+      }
     } else {
-      console.error("Failed to add player");
+      console.error("Error updating players");
     }
+  };
+
+  const handleSelectWinner = (bracketIndex, player) => {
+    setSelectedWinners((prevWinners) => ({
+      ...prevWinners,
+      [bracketIndex]: player,
+    }));
   };
 
   const renderBrackets = () => {
@@ -45,9 +78,27 @@ const IndividualCompetitionScreen = (props) => {
 
     return playerPairs.map((pair, index) => (
       <View key={index} style={styles.bracketPair}>
-        <Text style={styles.playerBlock}>{pair.player1}</Text>
+        <TouchableOpacity
+          style={[
+            styles.playerBlock,
+            selectedWinners[index] === pair.player1 &&
+              styles.selectedPlayerBlock,
+          ]}
+          onPress={() => handleSelectWinner(index, pair.player1)}
+        >
+          <Text style={styles.playerBlockText}>{pair.player1}</Text>
+        </TouchableOpacity>
         <Text style={styles.vs}>vs.</Text>
-        <Text style={styles.playerBlock}>{pair.player2}</Text>
+        <TouchableOpacity
+          style={[
+            styles.playerBlock,
+            selectedWinners[index] === pair.player2 &&
+              styles.selectedPlayerBlock,
+          ]}
+          onPress={() => handleSelectWinner(index, pair.player2)}
+        >
+          <Text style={styles.playerBlockText}>{pair.player2}</Text>
+        </TouchableOpacity>
       </View>
     ));
   };
@@ -67,6 +118,16 @@ const IndividualCompetitionScreen = (props) => {
       setCanJoin(false);
     }
   }, [eventDetails, user.email]);
+
+  const electWinners = () => {
+    console.log("Submitting winners...");
+    // console.log(selectedWinners);
+    const competitionId = event.id;
+    const winners = Object.values(selectedWinners);
+    console.log("Winners: ", winners);
+    updateWinners(competitionId, winners);
+    concludeEvent(competitionId);
+  };
 
   return (
     <View style={styles.main}>
@@ -108,24 +169,52 @@ const IndividualCompetitionScreen = (props) => {
               )}
             </>
           ) : (
-            <Text style={styles.textColor2}>&#40; no players entered &#41;</Text>
+            <Text style={styles.textColor2}>
+              &#40; no players entered &#41;
+            </Text>
           )}
-          {canJoin ? (
-            <TouchableOpacity onPress={handleUpdatePlayers}>
+          {eventDetails.concluded ? null : canJoin ? (
+            <TouchableOpacity onPress={() => handleUpdatePlayers("add")}>
               <Text style={styles.joinButton}>Join Event</Text>
             </TouchableOpacity>
           ) : (
-            <Text style={styles.leaveButton}>Leave Event</Text>
+            <TouchableOpacity onPress={() => handleUpdatePlayers("remove")}>
+              <Text style={styles.leaveButton}>Leave Event</Text>
+            </TouchableOpacity>
           )}
 
           {eventDetails.players.length > 0 ? (
             <View style={styles.playerBrackets}>
               <Text style={styles.textColor}>Player Brackets:</Text>
               {renderBrackets()}
+              {Object.keys(selectedWinners).length ===
+                eventDetails.players.length / 2 &&
+                !eventDetails.concluded && (
+                  <View style={styles.submitWinnersButton}>
+                    <TouchableOpacity onPress={() => electWinners()}>
+                      <Text style={styles.joinButton}>Submit Winners</Text>
+                    </TouchableOpacity>
+                  </View>
+                )}
             </View>
           ) : (
             <Text style={styles.textColor2}>
-              &#40; Player brackets require a minimum of two players to generate &#41;
+              &#40; Player brackets require a minimum of two players to generate
+              &#41;
+            </Text>
+          )}
+          {eventDetails.winners && eventDetails.winners.length > 0 ? (
+            <View>
+              <Text style={styles.textColor}>Winners:</Text>
+              {eventDetails.winners.map((winner, index) => (
+                <Text key={index} style={styles.textColor3}>
+                  {winner}
+                </Text>
+              ))}
+            </View>
+          ) : (
+            <Text style={styles.textColor2}>
+              &#40; No winners have been selected yet &#41;
             </Text>
           )}
         </View>
@@ -210,12 +299,22 @@ const styles = StyleSheet.create({
     width: "100%",
   },
   playerBlock: {
-    color: "white",
-    backgroundColor: "purple",
+    backgroundColor: "#101116",
     padding: 5,
     marginHorizontal: 5,
     flex: 1,
     textAlign: "center",
+    borderRadius: 2,
+    borderWidth: 1,
+    borderColor: "#00F083",
+  },
+  playerBlockText: {
+    color: "white",
+    fontSize: 10,
+  },
+  selectedPlayerBlock: {
+    backgroundColor: "#00F083",
+    borderColor: "#FFFFFF",
   },
   bracketPair: {
     flexDirection: "row",
@@ -226,5 +325,8 @@ const styles = StyleSheet.create({
   vs: {
     color: "white",
     marginHorizontal: 10,
+  },
+  submitWinnersButton: {
+    alignItems: "flex-end",
   },
 });

@@ -103,6 +103,7 @@ export default function App() {
 
   useEffect(() => {
     const backAction = () => {
+      setDeepNav("");
       if (backPressedOnce) {
         BackHandler.exitApp();
         return true;
@@ -153,6 +154,8 @@ export default function App() {
     switch (deepNav) {
       case "details":
         return <IndividualCompetitionScreen event={event} user={user} setDeepNav={setDeepNav}/>;
+      case "eventPlan":
+        return <EventPlannerScreen user={user} setDeepNav={setDeepNav} />;
       default:
         return <ProfileScreen user={user} />;
     }

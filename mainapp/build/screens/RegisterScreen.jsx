@@ -76,8 +76,16 @@ const RegisterScreen = ({ authNavigate }) => {
   const [repeatPassword, setRepeatPassword] = useState("");
 
   const register = () => {
+
+    if (password !== repeatPassword) {
+      alert("Passwords do not match");
+      return;
+    }
+    if (!firstName || !lastName || !email || !username || !password) {
+      alert("Please complete all fields");
+      return;
+    }
     handleCreateUser(firstName, lastName, email, username, password);
-    // navigateTo("Splash");
   };
 
   const logo = require("../../assets/logo2.png");
@@ -93,13 +101,13 @@ const RegisterScreen = ({ authNavigate }) => {
             <TextInput
               placeholder="First Name"
               onChangeText={(e) => setFirstName(e)}
-              placeholderTextColor="#5E1111"
+              placeholderTextColor="#5E5E5E"
               style={styles.Input}
             ></TextInput>
             <TextInput
               placeholder="Last Name"
               onChangeText={(e) => setLastName(e)}
-              placeholderTextColor="#5E1111"
+              placeholderTextColor="#5E5E5E"
               style={styles.Input}
             ></TextInput>
             <TextInput
@@ -111,7 +119,7 @@ const RegisterScreen = ({ authNavigate }) => {
             <TextInput
               placeholder="Choose a Username"
               onChangeText={(e) => setUsername(e)}
-              placeholderTextColor="#5E1111"
+              placeholderTextColor="#5E5E5E"
               style={styles.Input}
             ></TextInput>
             <TextInput
@@ -124,7 +132,7 @@ const RegisterScreen = ({ authNavigate }) => {
             <TextInput
               placeholder="Repeat Password"
               onChangeText={(e) => setRepeatPassword(e)}
-              placeholderTextColor="#5E1111"
+              placeholderTextColor="#5E5E5E"
               style={styles.Input}
               secureTextEntry={true}
             ></TextInput>

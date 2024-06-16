@@ -16,7 +16,7 @@ const ProfileScreen = (props) => {
   const profileIcon = require("../../assets/icons/profile.png");
   const logo = require("../../assets/logo2.gif");
 
-  const { navigateTo } = props;
+  const { setDeepNav } = props;
   const [competitions, setCompetitions] = useState([]);
   const [loading, setLoading] = useState(true);
   const [editing, setEditing] = useState(false);
@@ -48,7 +48,7 @@ const ProfileScreen = (props) => {
   return (
     <View style={styles.main}>
       <View style={styles.topRow}>
-        <Pressable onPress={() => navigateTo("Competitions")}>
+        <Pressable onPress={() => setDeepNav("")}>
           <View style={styles.row}>
             <AntDesign name="arrowleft" size={12} color="#00F083" />
             <Text style={styles.text}>Back</Text>
