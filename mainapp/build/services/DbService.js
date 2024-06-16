@@ -3,7 +3,10 @@ import { db } from "../../firebase";
 
 export const createNewCompetition = async (competition) => {
     try {
-        const docRef = await addDoc(collection(db, "competitions"), competition);
+        const docRef = await addDoc(collection(db, "competitions"), {
+            ...competition,
+            timestamp: new Date()
+        });
         console.log("Document written with ID: ", docRef.id, " Competition: ", competition);
         return true;
     } catch (e) {
@@ -46,7 +49,9 @@ export const updateWinners = async (competitionId, winners) => {
     try {
         const competitionRef = doc(db, "competitions", competitionId);
         await updateDoc(competitionRef, {
-            winners: winners
+            winners: winners,
+            concluded: true,
+            concludedTime: new Date()
         });
         console.log("Winners updated for competition with ID: ", competitionId, " Winners: ", winners);
         return true;
@@ -60,7 +65,8 @@ export const concludeEvent = async (competitionId) => {
     try {
         const competitionRef = doc(db, "competitions", competitionId);
         await updateDoc(competitionRef, {
-            concluded: true
+            concluded: true,
+            concludedTime: new Date()
         });
         console.log("Competition concluded with ID: ", competitionId);
         return true;

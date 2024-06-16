@@ -129,6 +129,17 @@ const IndividualCompetitionScreen = (props) => {
     concludeEvent(competitionId);
   };
 
+  // log the timestamp
+  // console.log(eventDetails.timestamp);
+  // console.log(eventDetails);
+
+  const milliseconds =
+    event.timestamp.seconds * 1000 + event.timestamp.nanoseconds / 1000000;
+  const date = new Date(milliseconds);
+
+
+
+
   return (
     <View style={styles.main}>
       <View style={styles.topRow}>
@@ -142,6 +153,9 @@ const IndividualCompetitionScreen = (props) => {
       {eventDetails ? (
         <View style={styles.content}>
           <Text style={styles.textColor}>Event: </Text>
+          <Text style={[styles.textColor, styles.startTimeText]}>
+            Start time: {date.toString()}
+          </Text>
           <View>
             <View style={styles.title}>
               <Text style={styles.textColor}>Title: {eventDetails.title}</Text>
@@ -207,14 +221,16 @@ const IndividualCompetitionScreen = (props) => {
             <View>
               <Text style={styles.textColor}>Winners:</Text>
               {eventDetails.winners.map((winner, index) => (
-                <Text key={index} style={styles.textColor3}>
-                  {winner}
-                </Text>
+                <>
+                  <Text key={index} style={styles.textColor3}>
+                    {winner}
+                  </Text>
+                </>
               ))}
             </View>
           ) : (
             <Text style={styles.textColor2}>
-              &#40; No winners have been selected yet &#41;
+              &#40; No winners have been elected yet &#41;
             </Text>
           )}
         </View>
@@ -328,5 +344,9 @@ const styles = StyleSheet.create({
   },
   submitWinnersButton: {
     alignItems: "flex-end",
+  },
+  startTimeText: {
+    color: "#5E5E5E",
+    fontSize: 12,
   },
 });
