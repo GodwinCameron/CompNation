@@ -1,10 +1,20 @@
-<h1>Welcome!</h1>
+![GitHub repo size](https://img.shields.io/github/repo-size/GodwinCameron/CompNation?color=orange)
+![GitHub watchers](https://img.shields.io/github/watchers/GodwinCameron/CompNation?color=limegreen)
+![GitHub language count](https://img.shields.io/github/languages/count/GodwinCameron/CompNation?color=lightblue)
+![Github Language](https://img.shields.io/github/languages/top/GodwinCameron/CompNation?color=yellow)
+![GitHub code size in bytes](https://img.shields.io/github/languages/code-size/GodwinCameron/CompNation?color=limegreen)
 
-### CompNation Overview
-<p>CompNation is a competitive mobile app that let's users plan out and battle each other through a bracket and knockout system!</p>
+<h1>🌍 Welcome!</h1>
+
+### - CompNation Overview
+<p>CompNation is a competitive mobile app that lets users plan out and battle each other through a bracket and knockout system!</p>
 </br>
 
-## Table of Contents
+<div align="center"><a align="center" href="https://github.com/GodwinCameron/CompNation"><img align="center" width="120" alt="icon2" src="https://github.com/GodwinCameron/CompNation/assets/71267628/d36bd02c-d9b6-482c-96ff-2b766e0dfdd4"></a></div>
+
+## ☄️ Demo
+
+## 📒 Table of Contents
 
 - [About the Project](#-compnation-overview)
 - [Getting Started](#getting-started)
@@ -15,17 +25,17 @@
 
 </br>
 
-## Getting Started
+## 🔥 Getting Started
 <p>To get a development build of this project up and running on your system make sure you have the following</p>
 
-### Pre-requisites:
+### - Pre-requisites:
 <ul>
 <li>Node (installed on Hosting device)<span><a href="https://nodejs.org/en/download/"> Node Offical Download</a></span></li>
 <li>GitHub Desktop - <a href="https://desktop.github.com/">GitHub Offical Download</a></li>
 <li>Expo Go (Phone app availible on <a href="https://play.google.com/store/apps/details?id=host.exp.exponent">Google Play</a> store or Apple <a href="https://apps.apple.com/us/app/expo-go/id982107779">AppStore</a>)</<li>
 </ul>
 
-### Cloning the repo onto your system:
+### - Cloning the repo onto your system:
 <p>once you have Node and GitHub Desktop on your machine, head over to the top of this repo (the top of the page where you are reading this) and click on the green dropdown "Code" button:</p>
 </br>
 
@@ -55,7 +65,7 @@
 <p>If you'd like to edit or change any of the code, you can either fork the branch or commit to your own GitHub account.</p>
 </br>
 
-### Running the Development Environment:
+### - Running the Development Environment:
 <p>For this section, you'll need to open up your command line, this is either Command Prompt (CMD) for Windows or Termianl for iOS.</p>
 <p>Next, navigate to the repository by typing </p>
 
@@ -87,7 +97,7 @@
 <p>The development environment is now running on your local network!</p>
 </br>
 
-### Viewing the app on your Phone:
+### - Viewing the app on your Phone:
 <p>Once you've gotten the development environment up and running on your local network, ensure that your phone is also connected to the same network as your hosting device.</p>
 <p>Then open your Expo Go App and either scan the QR code from the Command Line Interface or copy the IP Address into the field on your phone. Once you see the entry point loading, you're all set!</p>
 
