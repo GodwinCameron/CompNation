@@ -6,36 +6,58 @@
 
 <h1>🌍 Welcome!</h1>
 
-### - CompNation Overview
+### CompNation Overview
 <p>CompNation is a competitive mobile app that lets users plan out and battle each other through a bracket and knockout system!</p>
 </br>
 
 <div align="center"><a align="center" href="https://github.com/GodwinCameron/CompNation"><img align="center" width="120" alt="icon2" src="https://github.com/GodwinCameron/CompNation/assets/71267628/d36bd02c-d9b6-482c-96ff-2b766e0dfdd4"></a></div>
 
-## ☄️ Demo
-
 ## 📒 Table of Contents
 
-- [About the Project](#-compnation-overview)
-- [Getting Started](#getting-started)
-  - [Pre-requisites](#getting-started)
+- [About the Project](#compnation-overview)
+- [Demo](#-demo)
+- [Built with](#-built-with)
+- 
+- [Getting Started](#-getting-started)
+  - [Pre-requisites](#-getting-started)
   - [Cloning the repo onto your system](#cloning-the-repo-onto-your-system)
   - [Running the Development Environment](#running-the-development-environment)
   - [Viewing the app on your Phone](#viewing-the-app-on-your-phone)
 
 </br>
 
+## ☄️ Demo
+
+https://github.com/GodwinCameron/CompNation/assets/71267628/1d431c1e-4424-4742-88cf-fc74476ec204
+
+
+## 🛠 Built with
+<div align="center">
+  <p>
+  <a align="center" href="https://angular.dev"><img align="center" width="70" alt="icon2" src="https://github.com/GodwinCameron/CompNation/assets/71267628/b3b3bed4-a207-461c-b82e-f10fc30516ae"></a>
+    &nbsp; &nbsp; &nbsp; 
+  <a align="center" href="https://www.postgresql.org"><img align="center" width="70" alt="icon2" src="https://github.com/GodwinCameron/CompNation/assets/71267628/6d5d76dd-56e4-418f-8055-89b96e1d6f42"></a>
+    &nbsp; &nbsp; &nbsp; 
+  <a align="center" href="https://nodejs.org/en"><img align="center" width="70" alt="icon2" src="https://github.com/GodwinCameron/CompNation/assets/71267628/ecc47d81-f587-48be-8657-6848808d89a7"></a>
+    &nbsp; &nbsp; &nbsp;  
+  <a align="center" href="https://www.javascript.com"><img align="center" width="70" alt="icon2" src="https://github.com/GodwinCameron/CompNation/assets/71267628/47c3d378-8e81-4e29-91b8-5c3c6cd065fc"></a>
+  </p>
+  <p>&nbsp; Angular &nbsp; &nbsp; &nbsp;   PostgreSQL &nbsp; &nbsp;  NodeJS &nbsp; &nbsp; &nbsp;  JavaScript</p>
+</div>
+
+
+
 ## 🔥 Getting Started
 <p>To get a development build of this project up and running on your system make sure you have the following</p>
 
-### - Pre-requisites:
+### Pre-requisites:
 <ul>
 <li>Node (installed on Hosting device)<span><a href="https://nodejs.org/en/download/"> Node Offical Download</a></span></li>
 <li>GitHub Desktop - <a href="https://desktop.github.com/">GitHub Offical Download</a></li>
 <li>Expo Go (Phone app availible on <a href="https://play.google.com/store/apps/details?id=host.exp.exponent">Google Play</a> store or Apple <a href="https://apps.apple.com/us/app/expo-go/id982107779">AppStore</a>)</<li>
 </ul>
 
-### - Cloning the repo onto your system:
+### Cloning the repo onto your system:
 <p>once you have Node and GitHub Desktop on your machine, head over to the top of this repo (the top of the page where you are reading this) and click on the green dropdown "Code" button:</p>
 </br>
 
@@ -65,7 +87,7 @@
 <p>If you'd like to edit or change any of the code, you can either fork the branch or commit to your own GitHub account.</p>
 </br>
 
-### - Running the Development Environment:
+### Running the Development Environment:
 <p>For this section, you'll need to open up your command line, this is either Command Prompt (CMD) for Windows or Termianl for iOS.</p>
 <p>Next, navigate to the repository by typing </p>
 
@@ -97,7 +119,7 @@
 <p>The development environment is now running on your local network!</p>
 </br>
 
-### - Viewing the app on your Phone:
+### Viewing the app on your Phone:
 <p>Once you've gotten the development environment up and running on your local network, ensure that your phone is also connected to the same network as your hosting device.</p>
 <p>Then open your Expo Go App and either scan the QR code from the Command Line Interface or copy the IP Address into the field on your phone. Once you see the entry point loading, you're all set!</p>
 
