@@ -17,7 +17,7 @@
 - [About the Project](#compnation-overview)
 - [Demo](#-demo)
 - [Built with](#-built-with)
-- 
+- [Development Approach]()
 - [Getting Started](#-getting-started)
   - [Pre-requisites](#-getting-started)
   - [Cloning the repo onto your system](#cloning-the-repo-onto-your-system)
@@ -44,6 +44,19 @@ https://github.com/GodwinCameron/CompNation/assets/71267628/1d431c1e-4424-4742-8
   </p>
   <p>&nbsp; Angular &nbsp; &nbsp; &nbsp;   PostgreSQL &nbsp; &nbsp;  NodeJS &nbsp; &nbsp; &nbsp;  JavaScript</p>
 </div>
+
+
+## Development Approach
+<p>The brief of this project stipulated that we were to create a competition app, capable of having users enter a competition and to view winners of said competition. While drafting ideas of how I wanted to approach this, I planned out the following basic entity relations diagram:</p>
+
+![er](https://github.com/GodwinCameron/CompNation/assets/71267628/150e8018-42a9-4ff0-8ed1-acc99eb6aeae)
+
+<p>While not a perfect 1 to 1 representation of what the actual data looks like with the current build, it reflects the path I wanted to take for desiging these data models and the structuring of how they would interact. Further builds incorperating future implementations may very well look identical to or even add to this entity relation diagram.</p>
+
+<p> From the start, there wasn't a very concrete style design as I didn't want the app to appear as a competition layout itself by a static style. I wanted it to be used to host many different kinds of competitions simultaneously, making it difficult to stylize based off of only one topic (basket ball for example). While I do still plan on improving the stlye more, I want to retain the current baseplate design to allow for any competition to match visually with the app.</p>
+
+<p>For my first time using Firebase and working with cross platform development, I'm quite proud of how the project turned out. Ideas for improvements and future implementation have flooded my mind since completing this project and that makes this particular project a great kick-off pitch for my future apps of similar construct.</p>
+
 
 
 
